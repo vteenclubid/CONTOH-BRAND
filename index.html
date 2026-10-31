@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>AURA ATELIER | Luxury High-Fashion & Streetwear</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Syne & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Syne', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f7f7f7',
+                            100: '#e3e3e3',
+                            800: '#141414',
+                            900: '#0a0a0a',
+                            gold: '#d4af37',
+                            accent: '#e5e5e5'
+                        }
+                    },
+                    screens: {
+                        'xs': '375px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Base Reset & Prevent Horizontal Overflow */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #404040; }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Dynamic Visibility Classes */
+        .cart-drawer-open { transform: translateX(0) !important; }
+        .mobile-menu-open { transform: translateX(0) !important; }
+        .modal-active { opacity: 1 !important; pointer-events: auto !important; }
+        .no-scroll { overflow: hidden !important; touch-action: none; }
+
+        /* Touch Target Helper */
+        .touch-target {
+            min-height: 44px;
+            min-width: 44px;
+        }
+    </style>
+</head>
+<body class="bg-brand-900 text-neutral-100 font-body antialiased selection:bg-white selection:text-black relative w-full overflow-x-hidden">
+
+    <!-- 0. ICONIC PRELOADER -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-black flex flex-col justify-between p-6 sm:p-12 transition-opacity duration-700 ease-out">
+        <div class="flex justify-between items-center text-xs tracking-[0.3em] font-heading font-bold text-neutral-400 uppercase">
+            <span>AURA ATELIER</span>
+            <span>AUTUMN / WINTER '26</span>
+        </div>
+
+        <div class="my-auto max-w-4xl">
+            <h1 class="font-heading font-extrabold text-3xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tighter text-white uppercase leading-none mb-4">
+                REDEFINING <br> <span class="text-neutral-500">SUBCULTURE</span>
+            </h1>
+            <p class="text-xs sm:text-sm text-neutral-400 tracking-wider uppercase font-medium">Tokyo — Milan — Jakarta</p>
+        </div>
+
+        <div class="border-t border-neutral-800 pt-6 flex justify-between items-end">
+            <div class="space-y-1">
+                <span class="text-[10px] uppercase tracking-widest text-neutral-500 block">LOADING EXPERIENCE</span>
+                <div class="w-32 sm:w-48 bg-neutral-900 h-1 rounded-full overflow-hidden">
+                    <div id="loader-bar" class="bg-white h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+            <span id="loader-counter" class="font-heading font-extrabold text-4xl sm:text-6xl text-white">00</span>
+        </div>
+    </div>
+
+    <!-- 1. ANNOUNCEMENT BAR -->
+    <div class="bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 text-neutral-300 text-[11px] sm:text-xs py-2.5 px-4 text-center border-b border-neutral-800/60 flex justify-between items-center relative z-40">
+        <div class="hidden md:flex items-center gap-2 text-neutral-400 text-[11px] w-1/4">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="txt-store-status">Flagship Store: Open in Tokyo & Jakarta</span>
+        </div>
+        <p class="w-full md:w-auto font-medium text-[11px] sm:text-xs tracking-wider">
+            ✨ <span id="txt-promo">GRATIS ONGKIR SELURUH INDONESIA DENGAN KODE</span> 
+            <span class="text-white font-bold underline decoration-brand-gold ml-1">AURA2026</span>
+        </p>
+        <div class="hidden md:flex w-1/4 justify-end gap-3 text-neutral-400 text-xs items-center">
+            <span class="text-[11px]">IDR (Rp)</span>
+            <span>|</span>
+            <a href="#about" class="hover:text-white transition" id="txt-help">Bantuan</a>
+        </div>
+    </div>
+
+    <!-- 2. NAVBAR -->
+    <header class="sticky top-0 z-40 bg-brand-900/90 backdrop-blur-xl border-b border-neutral-800/80 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" aria-label="Toggle Navigation Menu" class="lg:hidden text-neutral-300 hover:text-white p-2 touch-target flex items-center justify-center rounded-lg border border-neutral-800 bg-neutral-900/50">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2.5 sm:gap-3 group">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 bg-white text-black font-heading font-extrabold flex items-center justify-center rounded-lg text-base sm:text-lg tracking-tighter group-hover:scale-105 transition-transform">
+                    A
+                </div>
+                <span class="font-heading font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tighter text-white">
+                    AURA <span class="text-[9px] sm:text-[10px] tracking-[0.3em] font-body uppercase text-neutral-400 font-medium ml-0.5">ATELIER</span>
+                </span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden lg:flex items-center space-x-6 xl:space-x-8 text-xs uppercase font-bold tracking-[0.18em]">
+                <a href="#hero" class="text-white hover:text-brand-gold transition py-2 border-b-2 border-brand-gold" id="nav-home">Beranda</a>
+                <a href="#collections" class="text-neutral-400 hover:text-white transition py-2 border-b-2 border-transparent hover:border-white" id="nav-collections">Koleksi</a>
+                <a href="#products" class="text-neutral-400 hover:text-white transition py-2 border-b-2 border-transparent hover:border-white" id="nav-arrivals">Katalog Terbaru</a>
+                <a href="#lookbook" class="text-neutral-400 hover:text-white transition py-2 border-b-2 border-transparent hover:border-white" id="nav-lookbook">Lookbook</a>
+                <a href="#about" class="text-neutral-400 hover:text-white transition py-2 border-b-2 border-transparent hover:border-white" id="nav-about">Tentang Kami</a>
+            </nav>
+
+            <!-- Desktop Actions (Lang Switcher, Wishlist, Search, Cart) -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                
+                <!-- LANGUAGE SWITCHER TOGGLE -->
+                <div class="bg-neutral-800/90 border border-neutral-700/80 rounded-full p-1 flex items-center">
+                    <button id="btn-lang-id" onclick="setLanguage('id')" class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider transition bg-white text-black touch-target min-h-0">
+                        ID
+                    </button>
+                    <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider transition text-neutral-400 hover:text-white touch-target min-h-0">
+                        EN
+                    </button>
+                </div>
+
+                <!-- Search Button -->
+                <button id="search-btn" aria-label="Search Catalog" class="text-neutral-300 hover:text-white p-2.5 transition rounded-full hover:bg-neutral-800/80 hidden sm:flex items-center justify-center">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Wishlist Icon -->
+                <button id="open-wishlist-btn" aria-label="Wishlist" class="relative text-neutral-300 hover:text-white p-2.5 transition rounded-full hover:bg-neutral-800/80 hidden sm:flex items-center justify-center">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                    <span id="wishlist-count" class="absolute top-1 right-1 bg-rose-500 text-white font-bold text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Cart Button -->
+                <button id="open-cart-btn" aria-label="Shopping Bag" class="relative bg-neutral-800 hover:bg-neutral-700 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full border border-neutral-700 flex items-center gap-2 transition active:scale-95 shadow-lg touch-target">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span class="text-[11px] font-bold font-heading uppercase hidden sm:inline" id="txt-cart-title">Tas</span>
+                    <span id="cart-count" class="bg-white text-black font-extrabold text-[11px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE SLIDE-OVER NAVIGATION MENU -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="mobile-menu-drawer" class="fixed top-0 left-0 z-50 w-[280px] sm:w-[320px] h-full bg-brand-900 border-r border-neutral-800 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-6 shadow-2xl">
+        <div class="space-y-6">
+            <div class="flex justify-between items-center border-b border-neutral-800 pb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-white text-black font-heading font-extrabold flex items-center justify-center rounded text-sm">A</div>
+                    <span class="font-heading font-extrabold text-lg text-white tracking-tighter">AURA ATELIER</span>
+                </div>
+                <button id="close-mobile-menu" class="text-neutral-400 hover:text-white p-2 touch-target">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <nav class="space-y-4 font-heading text-sm uppercase tracking-wider font-bold">
+                <a href="#hero" class="mobile-nav-link block text-white hover:text-brand-gold py-1" id="m-nav-home">Beranda</a>
+                <a href="#collections" class="mobile-nav-link block text-neutral-400 hover:text-white py-1" id="m-nav-collections">Koleksi</a>
+                <a href="#products" class="mobile-nav-link block text-neutral-400 hover:text-white py-1" id="m-nav-arrivals">Katalog Terbaru</a>
+                <a href="#lookbook" class="mobile-nav-link block text-neutral-400 hover:text-white py-1" id="m-nav-lookbook">Lookbook Editorial</a>
+                <a href="#about" class="mobile-nav-link block text-neutral-400 hover:text-white py-1" id="m-nav-about">Tentang Kami</a>
+            </nav>
+        </div>
+
+        <div class="border-t border-neutral-800 pt-6 space-y-4">
+            <div class="flex items-center justify-between text-xs text-neutral-400">
+                <span>Bahasa / Language:</span>
+                <div class="flex gap-2">
+                    <button onclick="setLanguage('id')" class="px-3 py-1 rounded-md bg-white text-black font-bold">ID</button>
+                    <button onclick="setLanguage('en')" class="px-3 py-1 rounded-md bg-neutral-800 text-neutral-300 font-bold">EN</button>
+                </div>
+            </div>
+            <p class="text-[10px] text-neutral-500 uppercase tracking-widest text-center">&copy; 2026 AURA ATELIER</p>
+        </div>
+    </aside>
+
+    <!-- 3. SEARCH OVERLAY MODAL -->
+    <div id="search-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-start justify-center pt-16 sm:pt-24 px-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xs font-semibold tracking-widest text-neutral-400 uppercase" id="txt-search-title">Cari Koleksi Atelier</h3>
+                <button id="close-search-btn" class="text-neutral-400 hover:text-white p-2 touch-target">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="Ketik hoodie, jacket, cargo pants..." class="w-full bg-neutral-900 border border-neutral-700 rounded-2xl px-5 sm:px-6 py-3.5 sm:py-4 text-sm sm:text-base text-white placeholder-neutral-500 focus:outline-none focus:border-white transition">
+                <i data-lucide="search" class="w-5 h-5 text-neutral-400 absolute right-4 top-4"></i>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-2 text-xs">
+                <span class="text-neutral-500 py-1" id="txt-trending-title">Popular:</span>
+                <button onclick="setSearchFilter('Cyberpunk')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 px-3 py-1.5 rounded-full border border-neutral-700 text-[11px]">Cyberpunk</button>
+                <button onclick="setSearchFilter('Denim')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 px-3 py-1.5 rounded-full border border-neutral-700 text-[11px]">Acid Denim</button>
+                <button onclick="setSearchFilter('Cargo')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 px-3 py-1.5 rounded-full border border-neutral-700 text-[11px]">Tactical Cargo</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full">
+        <!-- 4. HERO SECTION -->
+        <section id="hero" class="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden border-b border-neutral-800 px-4 py-16 sm:py-24">
+            <!-- Background Image Banner -->
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=2000&auto=format&fit=crop" 
+                     alt="Aura Atelier Hero Model" 
+                     class="w-full h-full object-cover object-center opacity-40 scale-105 transition-transform duration-1000">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/50 to-brand-900/30"></div>
+            </div>
+
+            <div class="relative z-10 max-w-5xl mx-auto text-center px-2">
+                <div class="inline-flex items-center gap-2 bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 text-neutral-200 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] px-3.5 sm:px-4 py-2 rounded-full mb-6 sm:mb-8 max-w-full">
+                    <span class="w-2 h-2 rounded-full bg-brand-gold animate-ping flex-shrink-0"></span>
+                    <span id="txt-hero-tag" class="truncate">Autumn / Winter '26 Collection Drop</span>
+                </div>
+                
+                <h1 class="font-heading font-extrabold text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tighter text-white uppercase mb-4 sm:mb-6 leading-[1.05]" id="txt-hero-headline">
+                    REDEFINING HIGH-FASHION <br class="hidden xs:inline">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-300 to-neutral-500">SUBCULTURE</span>
+                </h1>
+                
+                <p class="text-neutral-300 text-xs sm:text-base md:text-lg max-w-2xl mx-auto mb-8 sm:mb-10 font-light leading-relaxed" id="txt-hero-sub">
+                    Dirancang dengan potongan arsitektural, katun organik 450GSM berbobot berat, serta estetika futuristik minimalis dari Tokyo & Milan.
+                </p>
+
+                <!-- Hero Buttons -->
+                <div class="flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md mx-auto">
+                    <a href="#products" class="w-full xs:w-auto bg-white text-black hover:bg-neutral-200 font-extrabold px-7 sm:px-9 py-3.5 sm:py-4 rounded-full transition duration-300 uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 shadow-xl touch-target">
+                        <span id="btn-hero-shop">Jelajahi Produk</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#lookbook" class="w-full xs:w-auto bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-white font-bold px-7 sm:px-9 py-3.5 sm:py-4 rounded-full transition duration-300 uppercase tracking-widest text-xs flex items-center justify-center gap-2 backdrop-blur-md touch-target">
+                        <span id="btn-hero-lookbook">Lihat Lookbook</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. VALUE PROPOSITION BANNER -->
+        <section class="py-8 bg-neutral-950 border-b border-neutral-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
+                <div class="p-3 sm:p-4 flex flex-col items-center">
+                    <i data-lucide="truck" class="w-5 h-5 sm:w-6 sm:h-6 text-brand-gold mb-2"></i>
+                    <h4 class="font-heading font-bold text-[11px] sm:text-xs uppercase text-white" id="vp-1-title">Pengiriman Ekspres</h4>
+                    <p class="text-[10px] sm:text-[11px] text-neutral-400 mt-0.5" id="vp-1-sub">Gratis ongkir min. order $250</p>
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col items-center">
+                    <i data-lucide="shield-check" class="w-5 h-5 sm:w-6 sm:h-6 text-brand-gold mb-2"></i>
+                    <h4 class="font-heading font-bold text-[11px] sm:text-xs uppercase text-white" id="vp-2-title">100% Original</h4>
+                    <p class="text-[10px] sm:text-[11px] text-neutral-400 mt-0.5" id="vp-2-sub">Garansi autentikasi resmi</p>
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col items-center">
+                    <i data-lucide="rotate-ccw" class="w-5 h-5 sm:w-6 sm:h-6 text-brand-gold mb-2"></i>
+                    <h4 class="font-heading font-bold text-[11px] sm:text-xs uppercase text-white" id="vp-3-title">Retur 30 Hari</h4>
+                    <p class="text-[10px] sm:text-[11px] text-neutral-400 mt-0.5" id="vp-3-sub">Tukar size tanpa ribet</p>
+                </div>
+                <div class="p-3 sm:p-4 flex flex-col items-center">
+                    <i data-lucide="lock" class="w-5 h-5 sm:w-6 sm:h-6 text-brand-gold mb-2"></i>
+                    <h4 class="font-heading font-bold text-[11px] sm:text-xs uppercase text-white" id="vp-4-title">Pembayaran Aman</h4>
+                    <p class="text-[10px] sm:text-[11px] text-neutral-400 mt-0.5" id="vp-4-sub">Enkripsi SSL 256-bit</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CATEGORY COLLECTIONS GRID -->
+        <section id="collections" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 border-b border-neutral-800 pb-6">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold" id="txt-cat-subtitle">Kategori Pilihan</span>
+                    <h2 class="font-heading font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight mt-1" id="txt-cat-title">Koleksi Utama</h2>
+                </div>
+                <p class="text-neutral-400 text-xs sm:text-sm max-w-md mt-3 md:mt-0 leading-relaxed" id="txt-cat-desc">
+                    Pakaian berkarakter kuat yang memadukan kenyamanan streetwear harian dengan estetika runway tingkat tinggi.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Category 1 -->
+                <div class="group relative h-[360px] sm:h-[420px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900 cursor-pointer" onclick="filterByCategory('outerwear')">
+                    <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800&auto=format&fit=crop" 
+                         alt="Outerwear" 
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="text-[10px] text-brand-gold tracking-widest uppercase font-bold">01 / Vanguard</span>
+                        <h3 class="font-heading text-xl sm:text-2xl font-bold text-white uppercase mt-1 mb-2" id="cat-card-1">Outerwear & Jackets</h3>
+                        <span class="inline-flex items-center text-xs uppercase tracking-widest text-white font-semibold group-hover:text-brand-gold transition">
+                            <span class="txt-explore-line">Lihat Produk</span> <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="group relative h-[360px] sm:h-[420px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900 cursor-pointer" onclick="filterByCategory('tops')">
+                    <img src="https://images.unsplash.com/photo-1509967419530-da38b4704bc6?q=80&w=800&auto=format&fit=crop" 
+                         alt="Tops & Hoodies" 
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="text-[10px] text-brand-gold tracking-widest uppercase font-bold">02 / Heavyweight</span>
+                        <h3 class="font-heading text-xl sm:text-2xl font-bold text-white uppercase mt-1 mb-2" id="cat-card-2">Hoodies & Tops</h3>
+                        <span class="inline-flex items-center text-xs uppercase tracking-widest text-white font-semibold group-hover:text-brand-gold transition">
+                            <span class="txt-explore-line">Lihat Produk</span> <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="group relative h-[360px] sm:h-[420px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900 cursor-pointer" onclick="filterByCategory('bottoms')">
+                    <img src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop" 
+                         alt="Bottoms" 
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="text-[10px] text-brand-gold tracking-widest uppercase font-bold">03 / Utility</span>
+                        <h3 class="font-heading text-xl sm:text-2xl font-bold text-white uppercase mt-1 mb-2" id="cat-card-3">Tactical Bottoms</h3>
+                        <span class="inline-flex items-center text-xs uppercase tracking-widest text-white font-semibold group-hover:text-brand-gold transition">
+                            <span class="txt-explore-line">Lihat Produk</span> <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Category 4 -->
+                <div class="group relative h-[360px] sm:h-[420px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900 cursor-pointer" onclick="filterByCategory('accessories')">
+                    <img src="https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?q=80&w=800&auto=format&fit=crop" 
+                         alt="Accessories" 
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900 via-brand-900/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <span class="text-[10px] text-rose-400 tracking-widest uppercase font-bold">04 / Artifacts</span>
+                        <h3 class="font-heading text-xl sm:text-2xl font-bold text-white uppercase mt-1 mb-2" id="cat-card-4">Aksesori & Headwear</h3>
+                        <span class="inline-flex items-center text-xs uppercase tracking-widest text-white font-semibold group-hover:text-brand-gold transition">
+                            <span class="txt-explore-line">Lihat Produk</span> <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. MAIN PRODUCTS CATALOG -->
+        <section id="products" class="py-16 sm:py-20 bg-neutral-950 border-t border-b border-neutral-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                    <div>
+                        <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold" id="txt-prod-subtitle">Katalog Pilihan</span>
+                        <h2 class="font-heading font-bold text-2xl sm:text-4xl text-white uppercase tracking-tight mt-1" id="txt-prod-title">Rilisan Terbaru</h2>
+                    </div>
+
+                    <!-- Filter Pill Tabs (Horizontally Scrollable on Mobile) -->
+                    <div class="flex overflow-x-auto no-scrollbar gap-2 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0" id="filter-buttons">
+                        <button onclick="filterByCategory('all')" class="filter-btn active whitespace-nowrap bg-white text-black font-extrabold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target" data-cat="all" id="filter-all">Semua</button>
+                        <button onclick="filterByCategory('outerwear')" class="filter-btn whitespace-nowrap bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target" data-cat="outerwear" id="filter-outerwear">Outerwear</button>
+                        <button onclick="filterByCategory('tops')" class="filter-btn whitespace-nowrap bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target" data-cat="tops" id="filter-tops">Atasan & Hoodie</button>
+                        <button onclick="filterByCategory('bottoms')" class="filter-btn whitespace-nowrap bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target" data-cat="bottoms" id="filter-bottoms">Celana</button>
+                        <button onclick="filterByCategory('accessories')" class="filter-btn whitespace-nowrap bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target" data-cat="accessories" id="filter-accessories">Aksesori</button>
+                    </div>
+                </div>
+
+                <!-- Responsive Product Grid Container -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8" id="product-grid">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. LOOKBOOK EDITORIAL MASONRY GRID -->
+        <section id="lookbook" class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+                <span class="text-xs uppercase tracking-widest text-brand-gold font-bold" id="txt-lb-sub">Campaign Fall/Winter 2026</span>
+                <h2 class="font-heading font-extrabold text-2xl sm:text-5xl text-white uppercase tracking-tight mt-2" id="txt-lb-title">Editorial Lookbook</h2>
+                <p class="text-neutral-400 text-xs sm:text-sm mt-3" id="txt-lb-desc">Potret kampanye visual AURA ATELIER di lanskap perkotaan modern.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                <div class="space-y-4 sm:space-y-6">
+                    <div class="relative rounded-2xl overflow-hidden group border border-neutral-800 h-80 sm:h-96">
+                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Lookbook 1">
+                        <div class="absolute inset-0 bg-black/40 opacity-100 sm:opacity-0 group-hover:opacity-100 transition p-6 flex items-end">
+                            <span class="text-xs font-heading font-bold text-white uppercase tracking-wider">Tokyo Underground — Look 01</span>
+                        </div>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden group border border-neutral-800 h-64">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Lookbook 2">
+                        <div class="absolute inset-0 bg-black/40 opacity-100 sm:opacity-0 group-hover:opacity-100 transition p-6 flex items-end">
+                            <span class="text-xs font-heading font-bold text-white uppercase tracking-wider">Monochrome Tailoring — Look 02</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 sm:space-y-6">
+                    <div class="relative rounded-2xl overflow-hidden group border border-neutral-800 h-64">
+                        <img src="https://images.unsplash.com/photo-1490578474895-699bc4e2cf59?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Lookbook 3">
+                        <div class="absolute inset-0 bg-black/40 opacity-100 sm:opacity-0 group-hover:opacity-100 transition p-6 flex items-end">
+                            <span class="text-xs font-heading font-bold text-white uppercase tracking-wider">Heavy Utility Oversized — Look 03</span>
+                        </div>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden group border border-neutral-800 h-80 sm:h-96">
+                        <img src="https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Lookbook 4">
+                        <div class="absolute inset-0 bg-black/40 opacity-100 sm:opacity-0 group-hover:opacity-100 transition p-6 flex items-end">
+                            <span class="text-xs font-heading font-bold text-white uppercase tracking-wider">Raw Leather Craft — Look 04</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 sm:space-y-6">
+                    <div class="relative rounded-2xl overflow-hidden group border border-neutral-800 h-80 sm:h-96">
+                        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Lookbook 5">
+                        <div class="absolute inset-0 bg-black/40 opacity-100 sm:opacity-0 group-hover:opacity-100 transition p-6 flex items-end">
+                            <span class="text-xs font-heading font-bold text-white uppercase tracking-wider">Cyberpunk Silhouette — Look 05</span>
+                        </div>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden group border border-neutral-800 h-64">
+                        <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Lookbook 6">
+                        <div class="absolute inset-0 bg-black/40 opacity-100 sm:opacity-0 group-hover:opacity-100 transition p-6 flex items-end">
+                            <span class="text-xs font-heading font-bold text-white uppercase tracking-wider">Minimal Zip Hoodie — Look 06</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. ABOUT / BRAND MANIFESTO SECTION -->
+        <section id="about" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center p-6 sm:p-12">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-brand-gold font-bold" id="txt-ab-sub">Filosofi Atelier</span>
+                    <h2 class="font-heading font-extrabold text-2xl sm:text-4xl lg:text-5xl text-white uppercase tracking-tight mt-2 mb-4 sm:mb-6 leading-tight" id="txt-ab-title">
+                        Kerapian Baju Kelas Dunia & Potongan Futuristik
+                    </h2>
+                    <p class="text-neutral-300 text-xs sm:text-sm leading-relaxed mb-6" id="txt-ab-desc">
+                        AURA ATELIER didirikan untuk menantang pakem busana kasual konvensional. Kami mengombinasikan standar pembuatan pakaian bespoke couture dengan siluet streetwear berani.
+                    </p>
+                    <div class="grid grid-cols-3 gap-4 sm:gap-6 py-6 border-t border-b border-neutral-800 mb-6 sm:mb-8">
+                        <div>
+                            <span class="block font-heading text-lg sm:text-2xl font-bold text-white">450 GSM</span>
+                            <span class="text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-wider block mt-1" id="txt-ab-stat1">Heavy Cotton</span>
+                        </div>
+                        <div>
+                            <span class="block font-heading text-lg sm:text-2xl font-bold text-white">Tokyo</span>
+                            <span class="text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-wider block mt-1" id="txt-ab-stat2">Main Studio</span>
+                        </div>
+                        <div>
+                            <span class="block font-heading text-lg sm:text-2xl font-bold text-white">Limited</span>
+                            <span class="text-[9px] sm:text-[10px] text-neutral-400 uppercase tracking-wider block mt-1" id="txt-ab-stat3">Batches</span>
+                        </div>
+                    </div>
+                    <button onclick="showToast('Story page coming soon')" class="w-full sm:w-auto bg-white text-black font-extrabold px-8 py-3.5 rounded-full text-xs uppercase tracking-widest hover:bg-neutral-200 transition touch-target" id="btn-ab-more">
+                        Baca Selengkapnya
+                    </button>
+                </div>
+                <div class="relative h-64 sm:h-96 lg:h-full rounded-2xl overflow-hidden border border-neutral-800">
+                    <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Craftsmanship" 
+                         class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 10. INTERACTIVE CART DRAWER -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    
+    <aside id="cart-drawer" class="fixed top-0 right-0 z-50 w-full xs:w-[360px] sm:w-[420px] h-full bg-neutral-950 border-l border-neutral-800 transform translate-x-full transition-transform duration-300 flex flex-col justify-between shadow-2xl">
+        <!-- Cart Header -->
+        <div class="p-4 sm:p-6 border-b border-neutral-800 flex justify-between items-center bg-neutral-900">
+            <div class="flex items-center gap-3">
+                <i data-lucide="shopping-bag" class="w-5 h-5 text-white"></i>
+                <h3 class="font-heading font-bold text-sm sm:text-base text-white uppercase tracking-wider" id="txt-drawer-title">Tas Belanja</h3>
+            </div>
+            <button id="close-cart-btn" class="text-neutral-400 hover:text-white p-2 touch-target">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Free Shipping Progress Bar -->
+        <div class="px-4 sm:px-6 py-3.5 bg-neutral-900/60 border-b border-neutral-800">
+            <div class="flex justify-between text-[11px] mb-1">
+                <span id="txt-fs-label" class="text-neutral-300">Target Gratis Ongkir:</span>
+                <span id="txt-fs-amount" class="font-bold text-brand-gold">$250.00</span>
+            </div>
+            <div class="w-full bg-neutral-800 h-2 rounded-full overflow-hidden">
+                <div id="fs-progress-bar" class="bg-gradient-to-r from-brand-gold to-yellow-200 h-full w-0 transition-all duration-500"></div>
+            </div>
+            <p id="txt-fs-status" class="text-[10px] text-neutral-400 mt-1.5">Tambah lagi barang belanjaanmu untuk dapatkan ongkir gratis.</p>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cart-items" class="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+            <div id="empty-cart-msg" class="text-center py-20 text-neutral-500">
+                <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
+                <p class="text-xs uppercase tracking-wider" id="txt-cart-empty">Tas belanjaan kamu masih kosong</p>
+            </div>
+        </div>
+
+        <!-- Cart Footer -->
+        <div class="p-4 sm:p-6 border-t border-neutral-800 bg-neutral-900/80 space-y-4">
+            <!-- Promo Code Input -->
+            <div class="flex gap-2">
+                <input type="text" id="promo-input" placeholder="Kode Promo (misal: AURA2026)" class="bg-neutral-950 border border-neutral-800 rounded-xl px-3.5 py-2 text-xs text-white uppercase placeholder-neutral-600 focus:outline-none focus:border-white flex-1">
+                <button onclick="applyPromoCode()" class="bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs uppercase px-4 py-2 rounded-xl transition touch-target min-h-0" id="btn-apply-promo">Gunakan</button>
+            </div>
+
+            <div class="space-y-1.5 pt-2 border-t border-neutral-800/80">
+                <div class="flex justify-between text-xs">
+                    <span class="text-neutral-400 uppercase tracking-wider" id="txt-subtotal-label">Subtotal</span>
+                    <span id="cart-subtotal" class="font-bold text-white text-sm">$0.00</span>
+                </div>
+                <div class="flex justify-between text-xs text-emerald-400 hidden" id="discount-row">
+                    <span class="uppercase tracking-wider">Diskon Promo</span>
+                    <span id="cart-discount">-$0.00</span>
+                </div>
+            </div>
+
+            <button id="checkout-btn" class="w-full bg-white text-black hover:bg-neutral-200 font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-widest transition flex justify-center items-center gap-2 touch-target">
+                <span id="btn-checkout">Lanjut Ke Pembayaran</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 11. QUICK VIEW PRODUCT MODAL -->
+    <div id="quickview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative grid grid-cols-1 md:grid-cols-2">
+            <button id="close-quickview" class="absolute top-3 right-3 z-10 text-neutral-400 hover:text-white bg-neutral-800 p-2 rounded-full touch-target flex items-center justify-center">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="h-64 sm:h-80 md:h-full bg-neutral-950">
+                <img id="qv-image" src="" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <span id="qv-tag" class="text-[10px] font-bold tracking-widest text-brand-gold uppercase">Tag</span>
+                    <h3 id="qv-title" class="font-heading text-xl sm:text-2xl font-bold text-white uppercase mt-1 mb-2">Nama Produk</h3>
+                    <p id="qv-price" class="text-lg sm:text-xl font-extrabold text-white mb-4">$0.00</p>
+                    <p id="qv-desc" class="text-xs text-neutral-400 leading-relaxed mb-6">
+                        Pakaian berkualitas tinggi dengan jahitan ganda yang tahan lama dan siluet khas AURA ATELIER.
+                    </p>
+                    
+                    <!-- Size Selector in Modal -->
+                    <div class="mb-6">
+                        <label class="block text-[11px] uppercase tracking-widest text-neutral-400 mb-2 font-bold" id="txt-qv-size">Pilih Ukuran</label>
+                        <div class="flex gap-2" id="qv-size-container">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <button id="qv-add-btn" class="w-full bg-white text-black font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-widest hover:bg-neutral-200 transition flex justify-center items-center gap-2 touch-target">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span id="btn-qv-add">Tambah Ke Tas</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12. STICKY MOBILE BOTTOM BAR -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-neutral-950/95 backdrop-blur-xl border-t border-neutral-800/80 px-4 py-2 flex justify-around items-center">
+        <a href="#hero" class="flex flex-col items-center text-neutral-400 hover:text-white p-2">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            <span class="text-[9px] uppercase tracking-wider mt-1 font-bold">Home</span>
+        </a>
+        <button id="m-search-btn" onclick="document.getElementById('search-btn').click()" class="flex flex-col items-center text-neutral-400 hover:text-white p-2">
+            <i data-lucide="search" class="w-5 h-5"></i>
+            <span class="text-[9px] uppercase tracking-wider mt-1 font-bold">Cari</span>
+        </button>
+        <button id="m-wishlist-btn" onclick="showToast(currentLang === 'id' ? 'Wishlist disimpan' : 'Wishlist active')" class="flex flex-col items-center text-neutral-400 hover:text-white p-2 relative">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+            <span class="text-[9px] uppercase tracking-wider mt-1 font-bold">Favorit</span>
+        </button>
+        <button onclick="document.getElementById('open-cart-btn').click()" class="flex flex-col items-center text-neutral-400 hover:text-white p-2 relative">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+            <span class="text-[9px] uppercase tracking-wider mt-1 font-bold">Tas</span>
+        </button>
+    </div>
+
+    <!-- 13. TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 bg-white text-black px-5 py-3.5 sm:px-6 sm:py-4 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-xs tracking-wider uppercase transform translate-y-24 opacity-0 transition-all duration-300 border border-neutral-200">
+        <i data-lucide="check-circle-2" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600"></i>
+        <span id="toast-message">Notifikasi</span>
+    </div>
+
+    <!-- 14. FOOTER -->
+    <footer class="bg-black text-neutral-400 text-xs pt-16 sm:pt-20 pb-24 md:pb-12 border-t border-neutral-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 mb-12 sm:mb-16">
+                
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 bg-white text-black font-heading font-extrabold flex items-center justify-center rounded text-base">A</div>
+                        <span class="font-heading font-extrabold text-2xl text-white tracking-tighter">AURA ATELIER</span>
+                    </div>
+                    <p class="text-neutral-500 text-xs max-w-sm mb-6 leading-relaxed" id="txt-ft-about">
+                        Merek busana eksklusif berkonsep luxury streetwear dengan potongan presisi dan material berkelanjutan.
+                    </p>
+                    <div class="flex space-x-3 text-neutral-400">
+                        <a href="#" class="hover:text-white transition p-2.5 bg-neutral-900 rounded-full touch-target flex items-center justify-center"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-white transition p-2.5 bg-neutral-900 rounded-full touch-target flex items-center justify-center"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:text-white transition p-2.5 bg-neutral-900 rounded-full touch-target flex items-center justify-center"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase tracking-widest text-xs mb-4" id="txt-ft-col1-title">Navigasi Utama</h4>
+                    <ul class="space-y-2.5">
+                        <li><a href="#hero" class="hover:text-white transition" id="ft-nav-home">Beranda</a></li>
+                        <li><a href="#collections" class="hover:text-white transition" id="ft-nav-collections">Koleksi</a></li>
+                        <li><a href="#products" class="hover:text-white transition" id="ft-nav-products">Katalog Terbaru</a></li>
+                        <li><a href="#lookbook" class="hover:text-white transition" id="ft-nav-lookbook">Lookbook</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase tracking-widest text-xs mb-4" id="txt-ft-col2-title">Layanan Pelanggan</h4>
+                    <ul class="space-y-2.5">
+                        <li><a href="#" class="hover:text-white transition" id="ft-care-shipping">Pengiriman & Retur</a></li>
+                        <li><a href="#" class="hover:text-white transition" id="ft-care-guide">Panduan Ukuran</a></li>
+                        <li><a href="#" class="hover:text-white transition" id="ft-care-tracking">Lacak Pesanan</a></li>
+                        <li><a href="#" class="hover:text-white transition" id="ft-care-support">Pusat Bantuan</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white uppercase tracking-widest text-xs mb-4" id="txt-ft-col3-title">Newsletter</h4>
+                    <p class="text-neutral-500 mb-4 leading-relaxed" id="txt-ft-news-desc">Dapatkan akses privat untuk rilisan produk terbatas.</p>
+                    <form id="newsletter-form" class="space-y-2">
+                        <input type="email" required placeholder="Alamat email Anda" class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-4 py-2.5 text-white placeholder-neutral-600 focus:outline-none focus:border-white transition">
+                        <button type="submit" class="w-full bg-white text-black font-extrabold py-2.5 rounded-xl uppercase tracking-widest hover:bg-neutral-200 transition touch-target" id="btn-ft-subscribe">
+                            Daftar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row justify-between items-center text-neutral-600 gap-4 text-center sm:text-left">
+                <p>&copy; 2026 AURA ATELIER. Hak Cipta Dilindungi.</p>
+                <div class="flex gap-6 text-[11px]">
+                    <a href="#" class="hover:text-neutral-400">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-neutral-400">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC & LANGUAGE TRANSLATIONS -->
+    <script>
+        // TRANSLATION DICTIONARY
+        const translations = {
+            id: {
+                "store-status": "Flagship Store: Buka di Tokyo & Jakarta",
+                "promo": "GRATIS ONGKIR SELURUH INDONESIA DENGAN KODE",
+                "help": "Bantuan",
+                "nav-home": "Beranda",
+                "nav-collections": "Koleksi",
+                "nav-arrivals": "Katalog Terbaru",
+                "nav-lookbook": "Lookbook",
+                "nav-about": "Tentang Kami",
+                "cart-title": "Tas",
+                "search-title": "Cari Koleksi Atelier",
+                "trending-title": "Popular:",
+                "hero-tag": "Rilisan Koleksi Autumn / Winter '26",
+                "hero-headline": "REDEFINISI FASHION SUBCULTURE MODERN",
+                "hero-sub": "Dirancang dengan potongan arsitektural, katun organik 450GSM berbobot berat, serta estetika futuristik minimalis dari Tokyo & Milan.",
+                "hero-shop": "Jelajahi Produk",
+                "hero-lookbook": "Lihat Lookbook",
+                "vp-1-title": "Pengiriman Ekspres",
+                "vp-1-sub": "Gratis ongkir min. order $250",
+                "vp-2-title": "100% Original",
+                "vp-2-sub": "Garansi autentikasi resmi",
+                "vp-3-title": "Retur 30 Hari",
+                "vp-3-sub": "Tukar size tanpa ribet",
+                "vp-4-title": "Pembayaran Aman",
+                "vp-4-sub": "Enkripsi SSL 256-bit",
+                "cat-subtitle": "Kategori Pilihan",
+                "cat-title": "Koleksi Utama",
+                "cat-desc": "Pakaian berkarakter kuat yang memadukan kenyamanan streetwear harian dengan estetika runway tingkat tinggi.",
+                "explore-line": "Lihat Produk",
+                "cat-card-1": "Outerwear & Jaket",
+                "cat-card-2": "Hoodies & Tops",
+                "cat-card-3": "Celana Taktis",
+                "cat-card-4": "Aksesori & Topi",
+                "prod-subtitle": "Katalog Pilihan",
+                "prod-title": "Rilisan Terbaru",
+                "filter-all": "Semua",
+                "filter-outerwear": "Outerwear",
+                "filter-tops": "Atasan & Hoodie",
+                "filter-bottoms": "Celana",
+                "filter-accessories": "Aksesori",
+                "lb-sub": "Kampanye Fall/Winter 2026",
+                "lb-title": "Editorial Lookbook",
+                "lb-desc": "Potret kampanye visual AURA ATELIER di lanskap perkotaan modern.",
+                "ab-sub": "Filosofi Atelier",
+                "ab-title": "Kerapian Baju Kelas Dunia & Potongan Futuristik",
+                "ab-desc": "AURA ATELIER didirikan untuk menantang pakem busana kasual konvensional. Kami mengombinasikan standar pembuatan pakaian bespoke couture dengan siluet streetwear berani.",
+                "ab-stat1": "Heavy Cotton",
+                "ab-stat2": "Main Studio",
+                "ab-stat3": "Batches",
+                "ab-more": "Baca Selengkapnya",
+                "drawer-title": "Tas Belanja",
+                "fs-label": "Target Gratis Ongkir:",
+                "fs-status": "Tambah lagi barang belanjaanmu untuk dapatkan ongkir gratis.",
+                "cart-empty": "Tas belanjaan kamu masih kosong",
+                "subtotal-label": "Subtotal",
+                "btn-apply-promo": "Gunakan",
+                "btn-checkout": "Lanjut Ke Pembayaran",
+                "qv-size": "Pilih Ukuran",
+                "qv-add": "Tambah Ke Tas",
+                "ft-about": "Merek busana eksklusif berkonsep luxury streetwear dengan potongan presisi dan material berkelanjutan.",
+                "ft-col1-title": "Navigasi Utama",
+                "ft-col2-title": "Layanan Pelanggan",
+                "ft-col3-title": "Newsletter",
+                "ft-news-desc": "Dapatkan akses privat untuk rilisan produk terbatas.",
+                "btn-ft-subscribe": "Daftar",
+                "ft-care-shipping": "Pengiriman & Retur",
+                "ft-care-guide": "Panduan Ukuran",
+                "ft-care-tracking": "Lacak Pesanan",
+                "ft-care-support": "Pusat Bantuan"
+            },
+            en: {
+                "store-status": "Flagship Stores: Open in Tokyo & Jakarta",
+                "promo": "COMPLIMENTARY SHIPPING WORLDWIDE WITH CODE",
+                "help": "Support",
+                "nav-home": "Home",
+                "nav-collections": "Collections",
+                "nav-arrivals": "New Arrivals",
+                "nav-lookbook": "Lookbook",
+                "nav-about": "About Us",
+                "cart-title": "Bag",
+                "search-title": "Search Atelier Collection",
+                "trending-title": "Trending:",
+                "hero-tag": "Autumn / Winter '26 Collection Drop",
+                "hero-headline": "REDEFINING SUBCULTURE HIGH-FASHION",
+                "hero-sub": "Engineered with architectural cuts, 450GSM heavy organic cotton, and a minimal futuristic aesthetic from Tokyo & Milan.",
+                "hero-shop": "Explore Products",
+                "hero-lookbook": "View Lookbook",
+                "vp-1-title": "Express Shipping",
+                "vp-1-sub": "Free delivery over $250",
+                "vp-2-title": "100% Authentic",
+                "vp-2-sub": "Verified official product",
+                "vp-3-title": "30-Day Returns",
+                "vp-3-sub": "Hassle-free size exchange",
+                "vp-4-title": "Secure Checkout",
+                "vp-4-sub": "256-bit SSL encryption",
+                "cat-subtitle": "Featured Categories",
+                "cat-title": "Core Collections",
+                "cat-desc": "Statement garments combining daily streetwear comfort with high-fashion runway aesthetics.",
+                "explore-line": "Explore Line",
+                "cat-card-1": "Outerwear & Jackets",
+                "cat-card-2": "Hoodies & Tops",
+                "cat-card-3": "Tactical Bottoms",
+                "cat-card-4": "Accessories & Caps",
+                "prod-subtitle": "Curated Catalog",
+                "prod-title": "New Arrivals",
+                "filter-all": "All Items",
+                "filter-outerwear": "Outerwear",
+                "filter-tops": "Tops & Hoodies",
+                "filter-bottoms": "Bottoms",
+                "filter-accessories": "Accessories",
+                "lb-sub": "Fall/Winter 2026 Campaign",
+                "lb-title": "Editorial Lookbook",
+                "lb-desc": "A visual campaign capture of AURA ATELIER across modern urban landscapes.",
+                "ab-sub": "Atelier Manifesto",
+                "ab-title": "World-Class Tailoring & Futuristic Cuts",
+                "ab-desc": "AURA ATELIER was founded to defy conventional casual wear. We pair bespoke couture construction standards with bold subculture silhouettes.",
+                "ab-stat1": "Heavy Cotton",
+                "ab-stat2": "Main Studio",
+                "ab-stat3": "Batches",
+                "ab-more": "Read Full Story",
+                "drawer-title": "Shopping Bag",
+                "fs-label": "Free Shipping Progress:",
+                "fs-status": "Add more items to unlock free shipping.",
+                "cart-empty": "Your shopping bag is currently empty",
+                "subtotal-label": "Subtotal",
+                "btn-apply-promo": "Apply",
+                "btn-checkout": "Proceed to Checkout",
+                "qv-size": "Select Size",
+                "qv-add": "Add to Bag",
+                "ft-about": "Exclusive luxury streetwear brand engineered with precise craftsmanship and sustainable materials.",
+                "ft-col1-title": "Main Navigation",
+                "ft-col2-title": "Client Care",
+                "ft-col3-title": "Newsletter",
+                "ft-news-desc": "Receive private access to limited release drops.",
+                "btn-ft-subscribe": "Subscribe",
+                "ft-care-shipping": "Shipping & Returns",
+                "ft-care-guide": "Size Guide",
+                "ft-care-tracking": "Track Order",
+                "ft-care-support": "Help Center"
+            }
+        };
+
+        // PRODUCT DATA
+        const productsData = [
+            { id: 1, name_id: "Hoodie Oversized Cyberpunk", name_en: "Cyberpunk Oversized Hoodie", category: "tops", price: 180, tag_id: "Terlaris", tag_en: "Best Seller", colors: ["#171717", "#3b82f6", "#222222"], image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800&auto=format&fit=crop" },
+            { id: 2, name_id: "Jaket Kulit Arsitektural", name_en: "Architectural Leather Jacket", category: "outerwear", price: 450, tag_id: "Rilisan Terbatas", tag_en: "Limited Drop", colors: ["#0a0a0a", "#444444"], image: "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?q=80&w=800&auto=format&fit=crop" },
+            { id: 3, name_id: "Kaos Boxy Graphic Distressed", name_en: "Distressed Graphic Boxy Tee", category: "tops", price: 95, tag_id: "Baru", tag_en: "New Arrival", colors: ["#262626", "#ffffff"], image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop" },
+            { id: 4, name_id: "Celana Tactical Cargo", name_en: "Tactical Cargo Trousers", category: "bottoms", price: 210, tag_id: "Populer", tag_en: "Popular", colors: ["#14532d", "#171717"], image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop" },
+            { id: 5, name_id: "Zip Hoodie Minimalis Heavyweight", name_en: "Minimalist Heavyweight Zip Hoodie", category: "tops", price: 195, tag_id: "Esensial", tag_en: "Essentials", colors: ["#27272a", "#52525b"], image: "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?q=80&w=800&auto=format&fit=crop" },
+            { id: 6, name_id: "Jaket Denim Acid Wash", name_en: "Acid-Wash Denim Jacket", category: "outerwear", price: 320, tag_id: "Tren", tag_en: "Trending", colors: ["#1e3a8a", "#3b82f6"], image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?q=80&w=800&auto=format&fit=crop" },
+            { id: 7, name_id: "Topi Beanie Ribbed Studio", name_en: "Studio Ribbed Beanie Hat", category: "accessories", price: 65, tag_id: "Aksesori", tag_en: "Accessory", colors: ["#000000", "#d4af37"], image: "https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?q=80&w=800&auto=format&fit=crop" },
+            { id: 8, name_id: "Celana Wide-Leg Lipat", name_en: "Pleated Wide-Leg Pants", category: "bottoms", price: 240, tag_id: "Runway", tag_en: "Runway", colors: ["#0f172a", "#1a1a1a"], image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80&w=800&auto=format&fit=crop" }
+        ];
+
+        // STATE VARIABLES
+        let currentLang = 'id';
+        let cart = [];
+        let wishlist = [];
+        let currentQuickViewProduct = null;
+        let selectedQvSize = 'M';
+        let promoDiscount = 0;
+        const productSelectedSizes = {};
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            initPreloader();
+            lucide.createIcons();
+            renderProducts(productsData);
+            setupEventListeners();
+            updateCartUI();
+        });
+
+        // PRELOADER ANIMATION LOGIC
+        function initPreloader() {
+            document.body.classList.add('no-scroll');
+            let count = 0;
+            const counterEl = document.getElementById('loader-counter');
+            const barEl = document.getElementById('loader-bar');
+            const preloader = document.getElementById('preloader');
+
+            const interval = setInterval(() => {
+                count += Math.floor(Math.random() * 15) + 5;
+                if (count >= 100) {
+                    count = 100;
+                    clearInterval(interval);
+                    
+                    counterEl.textContent = '100';
+                    barEl.style.width = '100%';
+
+                    setTimeout(() => {
+                        preloader.classList.add('opacity-0', 'pointer-events-none');
+                        document.body.classList.remove('no-scroll');
+                    }, 500);
+                } else {
+                    counterEl.textContent = count < 10 ? `0${count}` : `${count}`;
+                    barEl.style.width = `${count}%`;
+                }
+            }, 80);
+        }
+
+        // SET LANGUAGE FUNCTION
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            const btnId = document.getElementById('btn-lang-id');
+            const btnEn = document.getElementById('btn-lang-en');
+            if (lang === 'id') {
+                btnId.className = "px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider transition bg-white text-black touch-target min-h-0";
+                btnEn.className = "px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider transition text-neutral-400 hover:text-white touch-target min-h-0";
+            } else {
+                btnEn.className = "px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider transition bg-white text-black touch-target min-h-0";
+                btnId.className = "px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider transition text-neutral-400 hover:text-white touch-target min-h-0";
+            }
+
+            const dict = translations[lang];
+            for (const key in dict) {
+                const el = document.getElementById(`txt-${key}`) || document.getElementById(`btn-${key}`) || document.getElementById(`nav-${key}`) || document.getElementById(`m-nav-${key}`) || document.getElementById(`ft-nav-${key}`) || document.getElementById(`${key}`);
+                if (el) {
+                    el.textContent = dict[key];
+                }
+            }
+
+            const exploreLines = document.querySelectorAll('.txt-explore-line');
+            exploreLines.forEach(el => el.textContent = dict['explore-line']);
+
+            renderProducts(productsData);
+            updateCartUI();
+            showToast(lang === 'id' ? "Bahasa diubah ke Indonesia" : "Language set to English");
+        }
+
+        // RENDER PRODUCTS
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = items.map(product => {
+                const name = currentLang === 'id' ? product.name_id : product.name_en;
+                const tag = currentLang === 'id' ? product.tag_id : product.tag_en;
+                const isWishlisted = wishlist.includes(product.id);
+
+                return `
+                <div class="product-card group bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden flex flex-col justify-between transition hover:border-neutral-700">
+                    <div class="relative overflow-hidden aspect-[4/5] bg-neutral-950">
+                        <!-- Badge Tag -->
+                        <span class="absolute top-3 left-3 z-10 bg-black/70 backdrop-blur-md text-white text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full border border-white/10">
+                            ${tag}
+                        </span>
+
+                        <!-- Wishlist Toggle -->
+                        <button onclick="toggleWishlist(${product.id})" class="absolute top-3 right-3 z-10 p-2.5 rounded-full bg-black/60 backdrop-blur-md text-white hover:text-rose-500 transition touch-target flex items-center justify-center">
+                            <i data-lucide="heart" class="w-4 h-4 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}"></i>
+                        </button>
+
+                        <img src="${product.image}" 
+                             alt="${name}" 
+                             class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                        
+                        <!-- Quick View Button Overlay -->
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                            <button onclick="openQuickView(${product.id})" class="bg-white text-black font-extrabold px-5 py-2.5 rounded-full text-xs uppercase tracking-widest hover:bg-neutral-200 transition shadow-lg flex items-center gap-2 touch-target">
+                                <i data-lucide="eye" class="w-4 h-4"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[9px] font-bold text-neutral-500 uppercase tracking-widest">${product.category}</span>
+                                <div class="flex gap-1">
+                                    ${product.colors.map(c => `<span class="w-2.5 h-2.5 rounded-full border border-neutral-700" style="background-color: ${c}"></span>`).join('')}
+                                </div>
+                            </div>
+                            <h3 class="font-heading font-bold text-white text-xs sm:text-sm mt-0.5 mb-1 leading-tight line-clamp-1">${name}</h3>
+                            <p class="text-white font-extrabold text-sm sm:text-base mb-3">$${product.price}.00</p>
+                        </div>
+
+                        <div class="space-y-2.5">
+                            <!-- Size Selectors -->
+                            <div class="flex items-center gap-1" id="size-group-${product.id}">
+                                ${['S', 'M', 'L', 'XL'].map(size => `
+                                    <button onclick="selectCardSize(${product.id}, '${size}', this)" class="size-btn flex-1 py-1.5 text-[10px] font-bold border ${size === 'M' ? 'border-white bg-white text-black' : 'border-neutral-800 text-neutral-400 hover:border-neutral-600'} rounded transition">
+                                        ${size}
+                                    </button>
+                                `).join('')}
+                            </div>
+
+                            <!-- Add to Cart -->
+                            <button onclick="addToCart(${product.id})" class="w-full bg-neutral-800 hover:bg-white hover:text-black text-white border border-neutral-700 font-extrabold py-2.5 rounded-xl text-xs uppercase tracking-widest transition flex justify-center items-center gap-2 touch-target">
+                                <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                                ${currentLang === 'id' ? 'Tambah Ke Tas' : 'Add to Bag'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+            lucide.createIcons();
+        }
+
+        // CARD SIZE SELECTION
+        function selectCardSize(productId, size, btn) {
+            productSelectedSizes[productId] = size;
+            const group = document.getElementById(`size-group-${productId}`);
+            const buttons = group.querySelectorAll('.size-btn');
+            buttons.forEach(b => {
+                b.className = 'size-btn flex-1 py-1.5 text-[10px] font-bold border border-neutral-800 text-neutral-400 hover:border-neutral-600 rounded transition';
+            });
+            btn.className = 'size-btn flex-1 py-1.5 text-[10px] font-bold border border-white bg-white text-black rounded transition';
+        }
+
+        // FILTER BY CATEGORY
+        function filterByCategory(cat) {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'filter-btn active whitespace-nowrap bg-white text-black font-extrabold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target';
+                } else {
+                    btn.className = 'filter-btn whitespace-nowrap bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 font-bold text-[11px] sm:text-xs uppercase px-4 sm:px-5 py-2.5 rounded-full transition touch-target';
+                }
+            });
+
+            if (cat === 'all') {
+                renderProducts(productsData);
+            } else {
+                const filtered = productsData.filter(p => p.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        // SEARCH FILTER TRIGGER
+        function setSearchFilter(query) {
+            document.getElementById('search-modal').classList.remove('modal-active');
+            const filtered = productsData.filter(p => 
+                p.name_id.toLowerCase().includes(query.toLowerCase()) || 
+                p.name_en.toLowerCase().includes(query.toLowerCase()) ||
+                p.category.toLowerCase().includes(query.toLowerCase())
+            );
+            renderProducts(filtered);
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // WISHLIST TOGGLE
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast(currentLang === 'id' ? "Dihapus dari wishlist" : "Removed from wishlist");
+            } else {
+                wishlist.push(productId);
+                showToast(currentLang === 'id' ? "Ditambahkan ke wishlist" : "Added to wishlist");
+            }
+            document.getElementById('wishlist-count').textContent = wishlist.length;
+            renderProducts(productsData);
+        }
+
+        // EVENT LISTENERS setup
+        function setupEventListeners() {
+            // Mobile Slide Drawer Menu Controls
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const closeMobileBtn = document.getElementById('close-mobile-menu');
+            const mobileDrawer = document.getElementById('mobile-menu-drawer');
+            const mobileOverlay = document.getElementById('mobile-menu-overlay');
+
+            const toggleMobileMenu = (open) => {
+                if (open) {
+                    mobileDrawer.classList.add('mobile-menu-open');
+                    mobileOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                    document.body.classList.add('no-scroll');
+                } else {
+                    mobileDrawer.classList.remove('mobile-menu-open');
+                    mobileOverlay.classList.add('opacity-0', 'pointer-events-none');
+                    document.body.classList.remove('no-scroll');
+                }
+            };
+
+            mobileBtn.addEventListener('click', () => toggleMobileMenu(true));
+            closeMobileBtn.addEventListener('click', () => toggleMobileMenu(false));
+            mobileOverlay.addEventListener('click', () => toggleMobileMenu(false));
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => toggleMobileMenu(false));
+            });
+
+            // Cart Drawer Controls
+            const openCartBtn = document.getElementById('open-cart-btn');
+            const closeCartBtn = document.getElementById('close-cart-btn');
+            const cartDrawer = document.getElementById('cart-drawer');
+            const cartOverlay = document.getElementById('cart-drawer-overlay');
+
+            const toggleCart = (open) => {
+                if(open) {
+                    cartDrawer.classList.add('cart-drawer-open');
+                    cartOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                    document.body.classList.add('no-scroll');
+                } else {
+                    cartDrawer.classList.remove('cart-drawer-open');
+                    cartOverlay.classList.add('opacity-0', 'pointer-events-none');
+                    document.body.classList.remove('no-scroll');
+                }
+            };
+
+            openCartBtn.addEventListener('click', () => toggleCart(true));
+            closeCartBtn.addEventListener('click', () => toggleCart(false));
+            cartOverlay.addEventListener('click', () => toggleCart(false));
+
+            // Search Modal Controls
+            const searchBtn = document.getElementById('search-btn');
+            const searchModal = document.getElementById('search-modal');
+            const closeSearchBtn = document.getElementById('close-search-btn');
+            const searchInput = document.getElementById('search-input');
+
+            searchBtn.addEventListener('click', () => {
+                searchModal.classList.add('modal-active');
+                searchInput.focus();
+            });
+            closeSearchBtn.addEventListener('click', () => searchModal.classList.remove('modal-active'));
+            searchInput.addEventListener('input', (e) => {
+                setSearchFilter(e.target.value);
+            });
+
+            // Quick View Close
+            document.getElementById('close-quickview').addEventListener('click', () => {
+                document.getElementById('quickview-modal').classList.remove('modal-active');
+            });
+
+            // Quick View Add to Cart
+            document.getElementById('qv-add-btn').addEventListener('click', () => {
+                if (currentQuickViewProduct) {
+                    addToCart(currentQuickViewProduct.id, selectedQvSize);
+                    document.getElementById('quickview-modal').classList.remove('modal-active');
+                }
+            });
+
+            // Newsletter Form
+            document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                showToast(currentLang === 'id' ? "Berhasil mendaftar newsletter!" : "Successfully subscribed to newsletter!");
+                e.target.reset();
+            });
+
+            // Checkout Button Action
+            document.getElementById('checkout-btn').addEventListener('click', () => {
+                if(cart.length === 0) {
+                    showToast(currentLang === 'id' ? "Tas belanja masih kosong" : "Shopping bag is empty");
+                } else {
+                    showToast(currentLang === 'id' ? "Menuju Halaman Checkout..." : "Redirecting to Checkout...");
+                }
+            });
+        }
+
+        // ADD TO CART
+        function addToCart(productId, sizeOverride = null) {
+            const product = productsData.find(p => p.id === productId);
+            const size = sizeOverride || productSelectedSizes[productId] || 'M';
+            
+            const existingIndex = cart.findIndex(item => item.id === productId && item.size === size);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += 1;
+            } else {
+                cart.push({ ...product, size: size, qty: 1 });
+            }
+
+            updateCartUI();
+            const name = currentLang === 'id' ? product.name_id : product.name_en;
+            showToast(`${name} (${size}) ${currentLang === 'id' ? 'masuk tas' : 'added to bag'}`);
+        }
+
+        // UPDATE CART UI & FREE SHIPPING PROGRESS
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCountBadge = document.getElementById('cart-count');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            const fsProgressBar = document.getElementById('fs-progress-bar');
+            const fsStatus = document.getElementById('txt-fs-status');
+
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            let subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            if (promoDiscount > 0) {
+                subtotal = Math.max(0, subtotal - promoDiscount);
+            }
+
+            cartCountBadge.textContent = totalItems;
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+
+            // Free Shipping Calc ($250 target)
+            const target = 250;
+            const progress = Math.min(100, (subtotal / target) * 100);
+            fsProgressBar.style.width = `${progress}%`;
+
+            if (subtotal >= target) {
+                fsStatus.textContent = currentLang === 'id' ? "🎉 Selamat! Anda mendapatkan gratis ongkir." : "🎉 Congratulations! You unlocked free shipping.";
+            } else {
+                const remaining = target - subtotal;
+                fsStatus.textContent = currentLang === 'id' 
+                    ? `Tambah $${remaining.toFixed(2)} lagi untuk gratis ongkir.`
+                    : `Add $${remaining.toFixed(2)} more for free shipping.`;
+            }
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div id="empty-cart-msg" class="text-center py-16 text-neutral-500">
+                        <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto mb-3 opacity-30"></i>
+                        <p class="text-xs uppercase tracking-wider">${translations[currentLang]['cart-empty']}</p>
+                    </div>
+                `;
+            } else {
+                cartItemsContainer.innerHTML = cart.map((item, index) => {
+                    const name = currentLang === 'id' ? item.name_id : item.name_en;
+                    return `
+                    <div class="flex gap-3 sm:gap-4 p-3 bg-neutral-900 rounded-xl border border-neutral-800 items-center">
+                        <img src="${item.image}" alt="${name}" class="w-14 h-16 sm:w-16 sm:h-20 object-cover rounded-lg bg-neutral-950 flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-heading font-bold text-white text-xs uppercase leading-tight truncate">${name}</h4>
+                            <span class="text-[10px] text-neutral-400 block mt-0.5">Size: ${item.size}</span>
+                            <span class="font-extrabold text-white text-xs sm:text-sm block mt-1">$${item.price}.00</span>
+                            
+                            <div class="flex items-center gap-2 mt-2">
+                                <button onclick="changeQty(${index}, -1)" class="w-5 h-5 bg-neutral-800 text-white rounded flex items-center justify-center text-xs hover:bg-neutral-700">-</button>
+                                <span class="text-xs text-white font-bold">${item.qty}</span>
+                                <button onclick="changeQty(${index}, 1)" class="w-5 h-5 bg-neutral-800 text-white rounded flex items-center justify-center text-xs hover:bg-neutral-700">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-neutral-500 hover:text-rose-400 p-2 touch-target flex items-center justify-center">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `}).join('');
+            }
+            lucide.createIcons();
+        }
+
+        // QUANTITY CHANGE
+        function changeQty(index, change) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // REMOVE FROM CART
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // PROMO CODE APPLICATION
+        function applyPromoCode() {
+            const input = document.getElementById('promo-input').value.trim();
+            if (input.toUpperCase() === 'AURA2026') {
+                promoDiscount = 30;
+                document.getElementById('discount-row').classList.remove('hidden');
+                document.getElementById('cart-discount').textContent = "-$30.00";
+                showToast(currentLang === 'id' ? "Diskon $30 berhasil dipasang!" : "Discount of $30 applied!");
+                updateCartUI();
+            } else {
+                showToast(currentLang === 'id' ? "Kode promo tidak valid" : "Invalid promo code");
+            }
+        }
+
+        // OPEN QUICK VIEW MODAL
+        function openQuickView(productId) {
+            const product = productsData.find(p => p.id === productId);
+            currentQuickViewProduct = product;
+
+            document.getElementById('qv-image').src = product.image;
+            document.getElementById('qv-title').textContent = currentLang === 'id' ? product.name_id : product.name_en;
+            document.getElementById('qv-tag').textContent = currentLang === 'id' ? product.tag_id : product.tag_en;
+            document.getElementById('qv-price').textContent = `$${product.price}.00`;
+
+            const container = document.getElementById('qv-size-container');
+            container.innerHTML = ['S', 'M', 'L', 'XL'].map(size => `
+                <button onclick="setQvSize('${size}', this)" class="qv-size-btn border ${size === 'M' ? 'border-white bg-white text-black' : 'border-neutral-700 text-white'} text-xs w-10 h-10 rounded-lg flex items-center justify-center font-bold transition">
+                    ${size}
+                </button>
+            `).join('');
+
+            selectedQvSize = 'M';
+            document.getElementById('quickview-modal').classList.add('modal-active');
+        }
+
+        function setQvSize(size, btn) {
+            selectedQvSize = size;
+            const container = document.getElementById('qv-size-container');
+            container.querySelectorAll('.qv-size-btn').forEach(b => {
+                b.className = 'qv-size-btn border border-neutral-700 text-white text-xs w-10 h-10 rounded-lg flex items-center justify-center font-bold transition';
+            });
+            btn.className = 'qv-size-btn border border-white bg-white text-black text-xs w-10 h-10 rounded-lg flex items-center justify-center font-bold transition';
+        }
+
+        // TOAST NOTIFICATION
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
